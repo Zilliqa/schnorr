@@ -60,8 +60,6 @@ cmake --build ${dir} -- -j${n_parallel}
 # remember to append `|| exit` after the commands added in if-then-else
 if [ "$os" = "Linux" ]
 then
-    ./scripts/ci_xml_checker.sh constants.xml || exit 1
-    ./scripts/ci_xml_checker.sh constants_local.xml || exit 1
     ./scripts/license_checker.sh || exit 1
     cmake --build ${dir} --target clang-format || exit 1
     cmake --build ${dir} --target clang-tidy || exit 1
