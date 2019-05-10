@@ -20,7 +20,7 @@ find_package(PkgConfig REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-find_package(Boost COMPONENTS filesystem system unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS system unit_test_framework REQUIRED)
 
 #TODO: upgrade to OpenSSL 1.1.1a
 find_package(OpenSSL REQUIRED)
