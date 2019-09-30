@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SCHNORR_H__
-#define __SCHNORR_H__
+#ifndef ZILLIQA_SRC_LIBSCHNORR_INCLUDE_SCHNORR_H_
+#define ZILLIQA_SRC_LIBSCHNORR_INCLUDE_SCHNORR_H_
 
 #include <openssl/bn.h>
 #include <openssl/ec.h>
@@ -117,6 +117,9 @@ class PubKey : public SerializableCrypto {
 
   /// Equality operator.
   bool operator==(const PubKey& r) const;
+
+  /// Inequality operator.
+  bool operator!=(const PubKey& r) const;
 
   /// Utility std::string conversion function for public key info.
   explicit operator std::string() const;
@@ -226,4 +229,4 @@ class Schnorr {
   static std::string PrintPoint(const EC_POINT* point);
 };
 
-#endif  // __SCHNORR_H__
+#endif  // ZILLIQA_SRC_LIBSCHNORR_INCLUDE_SCHNORR_H_

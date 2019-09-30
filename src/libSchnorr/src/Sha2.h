@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SHA2_H__
-#define __SHA2_H__
+#ifndef ZILLIQA_SRC_LIBSCHNORR_SRC_SHA2_H_
+#define ZILLIQA_SRC_LIBSCHNORR_SRC_SHA2_H_
 
 #include <openssl/sha.h>
 #include <vector>
@@ -24,7 +24,7 @@
 #define LOG_GENERAL(level, msg) ;
 
 /// List of supported hash variants.
-class HASH_TYPE {
+class HashType {
  public:
   static const unsigned int HASH_VARIANT_256 = 256;
   static const unsigned int HASH_VARIANT_512 = 512;
@@ -34,13 +34,13 @@ class HASH_TYPE {
 template <unsigned int SIZE>
 class SHA2 {
   static const unsigned int HASH_OUTPUT_SIZE = SIZE / 8;
-  SHA256_CTX m_context;
+  SHA256_CTX m_context{};
   bytes output;
 
  public:
   /// Constructor.
   SHA2() : output(HASH_OUTPUT_SIZE) {
-    if (SIZE != HASH_TYPE::HASH_VARIANT_256) {
+    if (SIZE != HashType::HASH_VARIANT_256) {
       LOG_GENERAL(FATAL, "assertion failed (" << __FILE__ << ":" << __LINE__
                                               << ": " << __FUNCTION__ << ")");
     }
@@ -89,4 +89,4 @@ class SHA2 {
 
 #undef LOG_GENERAL
 
-#endif  // __SHA2_H__
+#endif  // ZILLIQA_SRC_LIBSCHNORR_SRC_SHA2_H_

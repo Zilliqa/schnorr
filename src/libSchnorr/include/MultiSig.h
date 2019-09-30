@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MULTISIG_H__
-#define __MULTISIG_H__
+#ifndef ZILLIQA_SRC_LIBSCHNORR_INCLUDE_MULTISIG_H_
+#define ZILLIQA_SRC_LIBSCHNORR_INCLUDE_MULTISIG_H_
 
 #include <memory>
 #include <vector>
@@ -29,7 +29,7 @@
 /// CommitSecret stores information on the secret scalar.
 class CommitSecret : public SerializableCrypto {
   std::shared_ptr<BIGNUM> m_s;
-  bool m_initialized;
+  bool m_initialized{};
 
   friend class MultiSig;
   friend class CommitPoint;
@@ -69,7 +69,7 @@ class CommitSecret : public SerializableCrypto {
 /// Stores information on the public point.
 class CommitPoint : public SerializableCrypto {
   std::shared_ptr<EC_POINT> m_p;
-  bool m_initialized;
+  bool m_initialized{};
 
   friend class MultiSig;
   friend class CommitPointHash;
@@ -114,7 +114,7 @@ class CommitPoint : public SerializableCrypto {
 /// Stores information on the hash of the point.
 class CommitPointHash : public SerializableCrypto {
   std::shared_ptr<BIGNUM> m_h;
-  bool m_initialized;
+  bool m_initialized{};
 
   bool constructPreChecks();
   void Set(const CommitPoint& point);
@@ -158,7 +158,7 @@ class CommitPointHash : public SerializableCrypto {
 /// EC-Schnorr multisignature scheme.
 class Challenge : public SerializableCrypto {
   std::shared_ptr<BIGNUM> m_c;
-  bool m_initialized;
+  bool m_initialized{};
 
   friend class MultiSig;
   friend class Response;
@@ -210,7 +210,7 @@ class Challenge : public SerializableCrypto {
 /// EC-Schnorr multisignature scheme.
 class Response : public SerializableCrypto {
   std::shared_ptr<BIGNUM> m_r;
-  bool m_initialized;
+  bool m_initialized{};
 
   friend class MultiSig;
 
@@ -301,4 +301,4 @@ class MultiSig {
                         const Signature& signature, const PubKey& pubKey);
 };
 
-#endif  // __MULTISIG_H__
+#endif  // ZILLIQA_SRC_LIBSCHNORR_INCLUDE_MULTISIG_H_

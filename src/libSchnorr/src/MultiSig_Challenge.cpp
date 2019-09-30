@@ -107,7 +107,7 @@ void Challenge::Set(const CommitPoint& aggregatedCommit,
 
   // Compute the challenge c = H(r, kpub, m)
 
-  SHA2<HASH_TYPE::HASH_VARIANT_256> sha2;
+  SHA2<HashType::HASH_VARIANT_256> sha2;
 
   // The third domain separated hash function.
 

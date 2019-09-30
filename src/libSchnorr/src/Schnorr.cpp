@@ -102,7 +102,7 @@ bool Schnorr::Sign(const bytes& message, unsigned int offset, unsigned int size,
   // 7  Signature on m is (r, s)
 
   bytes buf(PUBKEY_COMPRESSED_SIZE_BYTES);
-  SHA2<HASH_TYPE::HASH_VARIANT_256> sha2;
+  SHA2<HashType::HASH_VARIANT_256> sha2;
 
   bool err = false;  // detect error
   int res = 1;       // result to return
@@ -254,7 +254,7 @@ bool Schnorr::Verify(const bytes& message, unsigned int offset,
     // 5. return r' == r
 
     bytes buf(PUBKEY_COMPRESSED_SIZE_BYTES);
-    SHA2<HASH_TYPE::HASH_VARIANT_256> sha2;
+    SHA2<HashType::HASH_VARIANT_256> sha2;
 
     bool err = false;
     bool err2 = false;

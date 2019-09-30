@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SCHNORRINTERNAL_H__
-#define __SCHNORRINTERNAL_H__
+#ifndef ZILLIQA_SRC_LIBSCHNORR_SRC_SCHNORRINTERNAL_H_
+#define ZILLIQA_SRC_LIBSCHNORR_SRC_SCHNORRINTERNAL_H_
 
 #include <openssl/bn.h>
 #include <openssl/ec.h>
@@ -54,7 +54,7 @@ struct BIGNUMSerialize {
 
   /// Serializes a BIGNUM into specified byte stream.
   static void SetNumber(bytes& dst, unsigned int offset, unsigned int size,
-                        std::shared_ptr<BIGNUM> value);
+                        const std::shared_ptr<BIGNUM>& value);
 };
 
 /// EC-Schnorr utility for serializing ECPOINT data type.
@@ -66,7 +66,7 @@ struct ECPOINTSerialize {
 
   /// Serializes an ECPOINT into specified byte stream.
   static void SetNumber(bytes& dst, unsigned int offset, unsigned int size,
-                        std::shared_ptr<EC_POINT> value);
+                        const std::shared_ptr<EC_POINT>& value);
 };
 
 template <class T>
@@ -85,4 +85,4 @@ static bool SerializableCryptoToHexStr(const T& input, std::string& str) {
 const uint8_t SECOND_DOMAIN_SEPARATED_HASH_FUNCTION_BYTE = 0x01;
 const uint8_t THIRD_DOMAIN_SEPARATED_HASH_FUNCTION_BYTE = 0x11;
 
-#endif  // __SCHNORRINTERNAL_H__
+#endif  // ZILLIQA_SRC_LIBSCHNORR_SRC_SCHNORRINTERNAL_H_

@@ -151,6 +151,8 @@ bool PubKey::operator==(const PubKey& r) const {
          BN_cmp(lhs_bnvalue.get(), rhs_bnvalue.get()) == 0;
 }
 
+bool PubKey::operator!=(const PubKey& r) const { return !(*this == r); }
+
 PubKey::operator std::string() const {
   std::string output;
   if (!SerializableCryptoToHexStr(*this, output)) {

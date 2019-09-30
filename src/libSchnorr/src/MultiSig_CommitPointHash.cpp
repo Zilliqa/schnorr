@@ -89,7 +89,7 @@ void CommitPointHash::Set(const CommitPoint& point) {
   m_initialized = false;
   bytes buf(Schnorr::PUBKEY_COMPRESSED_SIZE_BYTES);
 
-  SHA2<HASH_TYPE::HASH_VARIANT_256> sha2;
+  SHA2<HashType::HASH_VARIANT_256> sha2;
 
   // The second domain separated hash function.
 

@@ -245,7 +245,7 @@ bool MultiSig::MultiSigVerify(const bytes& message, unsigned int offset,
     // 4. r' = H(Q, kpub, m)
     // 5. return r' == r
 
-    SHA2<HASH_TYPE::HASH_VARIANT_256> sha2;
+    SHA2<HashType::HASH_VARIANT_256> sha2;
 
     // The third domain separated hash function.
 
