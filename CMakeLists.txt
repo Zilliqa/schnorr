@@ -99,12 +99,6 @@ install(
 )
 
 install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/cmake
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-    USE_SOURCE_PERMISSIONS
-)
-
-install(
     FILES ${CMAKE_SOURCE_DIR}/cmake/SchnorrConfig.cmake
     DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
