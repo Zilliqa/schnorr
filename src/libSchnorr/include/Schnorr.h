@@ -103,6 +103,9 @@ class PubKey : public SerializableCrypto {
   /// Destructor.
   ~PubKey();
 
+  /// Returns PubKey from input string
+  static PubKey GetPubKeyFromString(const std::string&);
+
   /// Implements the Serialize function inherited from SerializableCrypto.
   bool Serialize(std::vector<uint8_t>& dst, unsigned int offset) const;
 

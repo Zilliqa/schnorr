@@ -83,6 +83,25 @@ PubKey::~PubKey() {}
 // Serialization
 // ============================================================================
 
+PubKey PubKey::GetPubKeyFromString(const string& key) {
+  if (key.size() != 66) {
+    throw std::invalid_argument(
+        "Error: public key - invalid number of input characters for key");
+  }
+
+  bytes key_v;
+
+  try {
+    boost::algorithm::unhex(key.begin(), key.end(), back_inserter(key_v));
+  } catch (exception& e) {
+    throw std::invalid_argument(
+        "Error: public key - invalid format of input characters for key - "
+        "required hexadecimal characters");
+  }
+
+  return PubKey(key_v, 0);
+}
+
 bool PubKey::Serialize(bytes& dst, unsigned int offset) const {
   ECPOINTSerialize::SetNumber(dst, offset, PUB_KEY_SIZE, m_P);
   return true;
