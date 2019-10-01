@@ -62,6 +62,9 @@ class PrivKey : public SerializableCrypto {
   /// Destructor.
   ~PrivKey();
 
+  /// Returns PrivKey from input string
+  static PrivKey GetPrivKeyFromString(const std::string&);
+
   /// Implements the Serialize function inherited from SerializableCrypto.
   bool Serialize(std::vector<uint8_t>& dst, unsigned int offset) const;
 

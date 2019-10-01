@@ -71,6 +71,25 @@ PrivKey::~PrivKey() {}
 // Serialization
 // ============================================================================
 
+PrivKey PrivKey::GetPrivKeyFromString(const string& key) {
+  if (key.size() != 64) {
+    throw std::invalid_argument(
+        "Error: private key - invalid number of input characters for key");
+  }
+
+  bytes key_v;
+
+  try {
+    boost::algorithm::unhex(key.begin(), key.end(), back_inserter(key_v));
+  } catch (exception& e) {
+    throw std::invalid_argument(
+        "Error: private key - invalid format of input characters for key - "
+        "required hexadecimal characters");
+  }
+
+  return PrivKey(key_v, 0);
+}
+
 bool PrivKey::Serialize(bytes& dst, unsigned int offset) const {
   BIGNUMSerialize::SetNumber(dst, offset, PRIV_KEY_SIZE, m_d);
   return true;
