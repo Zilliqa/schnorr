@@ -103,4 +103,16 @@ if(LLVM_EXTRA_TOOLS)
     include(LLVMExtraTools)
 endif()
 
+INSTALL( TARGETS Schnorr
+           ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+           LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+           COMPONENT libraries)
+
+INSTALL( FILES ${HEADER_FILES}
+           DESTINATION ${CMAKE_INSTALL_HEADERDIR}
+           COMPONENT headers)
+
+INSTALL( FILES ${PROJECT_SOURCE_DIR}/cmake/SchnorrConfig.cmake
+           DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Schnorr)
+
 include(CPack)
