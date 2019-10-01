@@ -99,8 +99,9 @@ install(
 )
 
 install(
-    FILES ${CMAKE_SOURCE_DIR}/cmake/SchnorrConfig.cmake
+    DIRECTORY ${CMAKE_SOURCE_DIR}/src/libSchnorr/include
     DESTINATION ${CMAKE_INSTALL_PREFIX}
+    USE_SOURCE_PERMISSIONS
 )
 
 # add clang-format and clang-tidy targets lastly
