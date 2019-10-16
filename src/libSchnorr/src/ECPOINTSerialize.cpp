@@ -24,6 +24,8 @@
 
 using namespace std;
 
+std::mutex m_mutexECPOINT;
+
 shared_ptr<EC_POINT> ECPOINTSerialize::GetNumber(const bytes& src,
                                                  unsigned int offset,
                                                  unsigned int size) {
@@ -33,6 +35,10 @@ shared_ptr<EC_POINT> ECPOINTSerialize::GetNumber(const bytes& src,
     // BIGNUMSerialize::GetNumber failed
     return nullptr;
   }
+
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexECPOINT);
 
   unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
   if (ctx == nullptr) {
@@ -51,6 +57,10 @@ void ECPOINTSerialize::SetNumber(bytes& dst, unsigned int offset,
   shared_ptr<BIGNUM> bnvalue;
 
   {
+    // This mutex is to prevent multi-threaded issues with the use of openssl
+    // functions
+    std::lock_guard<mutex> g(m_mutexECPOINT);
+
     unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
     if (ctx == nullptr) {
       // Memory allocation failure

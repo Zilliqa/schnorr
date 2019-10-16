@@ -25,6 +25,7 @@
 #include <boost/algorithm/hex.hpp>
 #include <boost/functional/hash.hpp>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 

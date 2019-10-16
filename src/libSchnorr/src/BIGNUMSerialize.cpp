@@ -24,6 +24,8 @@
 
 using namespace std;
 
+std::mutex m_mutexBIGNUM;
+
 shared_ptr<BIGNUM> BIGNUMSerialize::GetNumber(const bytes& src,
                                               unsigned int offset,
                                               unsigned int size) {
@@ -38,6 +40,9 @@ shared_ptr<BIGNUM> BIGNUMSerialize::GetNumber(const bytes& src,
     return nullptr;
   }
 
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexBIGNUM);
   return shared_ptr<BIGNUM>(BN_bin2bn(src.data() + offset, size, NULL),
                             BN_clear_free);
 }
@@ -50,6 +55,10 @@ void BIGNUMSerialize::SetNumber(bytes& dst, unsigned int offset,
     // Overflow detected
     return;
   }
+
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexBIGNUM);
 
   const int actual_bn_size = BN_num_bytes(value.get());
 

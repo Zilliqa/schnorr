@@ -61,11 +61,17 @@ const std::unique_ptr<Schnorr::Curve> Schnorr::m_curve =
 const EC_GROUP* Schnorr::GetCurveGroup() { return m_curve->m_group.get(); }
 const BIGNUM* Schnorr::GetCurveOrder() { return m_curve->m_order.get(); }
 
+std::mutex m_mutexSchnorr;
+
 Schnorr::Schnorr() {}
 
 Schnorr::~Schnorr() {}
 
 PairOfKey Schnorr::GenKeyPair() {
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexSchnorr);
+
   PrivKey privkey;
   PubKey pubkey(privkey);
 
@@ -80,6 +86,10 @@ bool Schnorr::Sign(const bytes& message, const PrivKey& privkey,
 bool Schnorr::Sign(const bytes& message, unsigned int offset, unsigned int size,
                    const PrivKey& privkey, const PubKey& pubkey,
                    Signature& result) {
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexSchnorr);
+
   // Initial checks
 
   if (message.size() == 0) {
@@ -239,6 +249,10 @@ bool Schnorr::Verify(const bytes& message, const Signature& toverify,
 bool Schnorr::Verify(const bytes& message, unsigned int offset,
                      unsigned int size, const Signature& toverify,
                      const PubKey& pubkey) {
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexSchnorr);
+
   // Initial checks
 
   if (message.size() == 0) {
@@ -379,6 +393,9 @@ bool Schnorr::Verify(const bytes& message, unsigned int offset,
 }
 
 string Schnorr::PrintPoint(const EC_POINT* point) {
+  // This mutex is to prevent multi-threaded issues with the use of openssl
+  // functions
+  lock_guard<mutex> g(m_mutexSchnorr);
   unique_ptr<BIGNUM, void (*)(BIGNUM*)> x(BN_new(), BN_clear_free);
   unique_ptr<BIGNUM, void (*)(BIGNUM*)> y(BN_new(), BN_clear_free);
 
