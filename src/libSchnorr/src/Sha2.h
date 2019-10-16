@@ -21,8 +21,6 @@
 #include <openssl/sha.h>
 #include <vector>
 
-#define LOG_GENERAL(level, msg) ;
-
 /// List of supported hash variants.
 class HashType {
  public:
@@ -41,8 +39,8 @@ class SHA2 {
   /// Constructor.
   SHA2() : output(HASH_OUTPUT_SIZE) {
     if (SIZE != HashType::HASH_VARIANT_256) {
-      LOG_GENERAL(FATAL, "assertion failed (" << __FILE__ << ":" << __LINE__
-                                              << ": " << __FUNCTION__ << ")");
+      // Assertion failed
+      throw std::exception();
     }
 
     Reset();
@@ -54,7 +52,7 @@ class SHA2 {
   /// Hash update function.
   void Update(const bytes& input) {
     if (input.size() == 0) {
-      LOG_GENERAL(WARNING, "Nothing to update");
+      // Nothing to update
       return;
     }
 
@@ -64,8 +62,8 @@ class SHA2 {
   /// Hash update function.
   void Update(const bytes& input, unsigned int offset, unsigned int size) {
     if ((offset + size) > input.size()) {
-      LOG_GENERAL(FATAL, "assertion failed (" << __FILE__ << ":" << __LINE__
-                                              << ": " << __FUNCTION__ << ")");
+      // Assertion failed
+      throw std::exception();
     }
 
     SHA256_Update(&m_context, input.data() + offset, size);
@@ -86,7 +84,5 @@ class SHA2 {
     return output;
   }
 };
-
-#undef LOG_GENERAL
 
 #endif  // ZILLIQA_SRC_LIBSCHNORR_SRC_SHA2_H_
