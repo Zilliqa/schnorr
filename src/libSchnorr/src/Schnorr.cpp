@@ -40,9 +40,11 @@ class Schnorr::Curve {
       : m_group(EC_GROUP_new_by_curve_name(NID_secp256k1), EC_GROUP_clear_free),
         m_order(BN_new(), BN_clear_free) {
     if (m_group == nullptr) {
+      // Curve group setup failed
       throw std::bad_alloc();
     }
     if (m_order == nullptr) {
+      // Curve order setup failed
       throw std::bad_alloc();
     }
     // Get group order
@@ -129,8 +131,14 @@ bool Schnorr::Sign(const bytes& message, unsigned int offset, unsigned int size,
           // Random generation failed
           return false;
         }
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wparentheses-equality"
       } while (BN_is_zero(k.get()));
-
+#pragma clang diagnostic pop
+#else
+      } while (BN_is_zero(k.get()));
+#endif
       // 2. Compute the commitment Q = kG, where G is the base point
       err = (EC_POINT_mul(GetCurveGroup(), Q.get(), k.get(), NULL, NULL,
                           NULL) == 0);
@@ -216,6 +224,7 @@ bool Schnorr::Sign(const bytes& message, unsigned int offset, unsigned int size,
       sha2.Reset();
     } while (res);
   } else {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -359,6 +368,7 @@ bool Schnorr::Verify(const bytes& message, unsigned int offset,
 
       sha2.Reset();
     } else {
+      // Memory allocation failure
       throw std::bad_alloc();
     }
     return (!err) && (BN_cmp(challenge_built.get(), toverify.m_r.get()) == 0);

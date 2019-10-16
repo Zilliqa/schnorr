@@ -24,6 +24,7 @@ bool Challenge::constructPreChecks() { return (m_c != nullptr); }
 
 Challenge::Challenge() : m_c(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 }
@@ -38,6 +39,7 @@ Challenge::Challenge(const CommitPoint& aggregatedCommit,
                      unsigned int offset, unsigned int size)
     : m_c(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -46,13 +48,14 @@ Challenge::Challenge(const CommitPoint& aggregatedCommit,
 
 Challenge::Challenge(const bytes& src, unsigned int offset) {
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init Challenge
   }
 }
 
 Challenge::Challenge(const Challenge& src)
     : m_c(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -76,6 +79,7 @@ bool Challenge::Deserialize(const bytes& src, unsigned int offset) {
   shared_ptr<BIGNUM> tmp =
       BIGNUMSerialize::GetNumber(src, offset, CHALLENGE_SIZE);
   if (tmp == nullptr) {
+    // Deserialization failure
     return false;
   }
 

@@ -36,6 +36,7 @@ bool Signature::constructPreChecks() {
 Signature::Signature()
     : m_r(BN_new(), BN_clear_free), m_s(BN_new(), BN_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 }
@@ -43,26 +44,29 @@ Signature::Signature()
 Signature::Signature(const bytes& src, unsigned int offset)
     : m_r(BN_new(), BN_clear_free), m_s(BN_new(), BN_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init Signature from stream
   }
 }
 
 Signature::Signature(const Signature& src)
     : m_r(BN_new(), BN_clear_free), m_s(BN_new(), BN_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
   if (BN_copy(m_r.get(), src.m_r.get()) == NULL) {
+    // Signature challenge copy failed
     return;
   }
 
   if (BN_copy(m_s.get(), src.m_s.get()) == NULL) {
-    //
+    // Signature response copy failed
   }
 }
 
@@ -86,14 +90,17 @@ bool Signature::Deserialize(const bytes& src, unsigned int offset) {
       src, offset + SIGNATURE_CHALLENGE_SIZE, SIGNATURE_RESPONSE_SIZE);
 
   if ((result_r == nullptr) || (result_s == nullptr)) {
+    // BIGNUMSerialize::GetNumber failed
     return false;
   }
 
   if (BN_copy(m_r.get(), result_r.get()) == NULL) {
+    // Signature challenge copy failed
     return false;
   }
 
   if (BN_copy(m_s.get(), result_s.get()) == NULL) {
+    // Signature response copy failed
     return false;
   }
 
@@ -106,11 +113,11 @@ bool Signature::Deserialize(const bytes& src, unsigned int offset) {
 
 Signature& Signature::operator=(const Signature& src) {
   if (BN_copy(m_r.get(), src.m_r.get()) == NULL) {
-    return *this;
+    // Signature challenge copy failed
   }
 
   if (BN_copy(m_s.get(), src.m_s.get()) == NULL) {
-    //
+    // Signature response copy failed
   }
 
   return *this;

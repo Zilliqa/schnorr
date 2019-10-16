@@ -32,6 +32,7 @@ bool PrivKey::constructPreChecks() { return (m_d != nullptr); }
 
 PrivKey::PrivKey() : m_d(BN_new(), BN_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
@@ -41,27 +42,36 @@ PrivKey::PrivKey() : m_d(BN_new(), BN_clear_free) {
       // Private key generation failed
       break;
     }
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wparentheses-equality"
   } while (BN_is_zero(m_d.get()));
+#pragma clang diagnostic pop
+#else
+  } while (BN_is_zero(m_d.get()));
+#endif
 }
 
 PrivKey::PrivKey(const bytes& src, unsigned int offset)
     : m_d(BN_new(), BN_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init PrivKey from stream
   }
 }
 
 PrivKey::PrivKey(const PrivKey& src) : m_d(BN_new(), BN_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
   if (BN_copy(m_d.get(), src.m_d.get()) == NULL) {
-    //
+    // PrivKey copy failed
   }
 }
 
@@ -100,10 +110,12 @@ bool PrivKey::Deserialize(const bytes& src, unsigned int offset) {
       BIGNUMSerialize::GetNumber(src, offset, PRIV_KEY_SIZE);
 
   if (result == nullptr) {
+    // BIGNUMSerialize::GetNumber failed
     return false;
   }
 
   if (BN_copy(m_d.get(), result.get()) == NULL) {
+    // PrivKey copy failed
     return false;
   }
 
@@ -116,7 +128,7 @@ bool PrivKey::Deserialize(const bytes& src, unsigned int offset) {
 
 PrivKey& PrivKey::operator=(const PrivKey& src) {
   if (BN_copy(m_d.get(), src.m_d.get()) == NULL) {
-    //
+    // PrivKey copy failed
   }
   return *this;
 }

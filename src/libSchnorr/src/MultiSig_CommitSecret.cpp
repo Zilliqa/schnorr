@@ -26,6 +26,7 @@ CommitSecret::CommitSecret()
     : m_s(BN_new(), BN_clear_free), m_initialized(false) {
   // commit->secret should be in [1,...,order-1]
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -37,20 +38,27 @@ CommitSecret::CommitSecret()
       // Value to commit rand failed
       break;
     }
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wparentheses-equality"
   } while (BN_is_zero(m_s.get()));
-
+#pragma clang diagnostic pop
+#else
+  } while (BN_is_zero(m_s.get()));
+#endif
   m_initialized = (!err);
 }
 
 CommitSecret::CommitSecret(const bytes& src, unsigned int offset) {
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init CommitSecret
   }
 }
 
 CommitSecret::CommitSecret(const CommitSecret& src)
     : m_s(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -75,6 +83,7 @@ bool CommitSecret::Deserialize(const bytes& src, unsigned int offset) {
       BIGNUMSerialize::GetNumber(src, offset, COMMIT_SECRET_SIZE);
 
   if (tmp == nullptr) {
+    // Deserialization failure
     return false;
   }
 

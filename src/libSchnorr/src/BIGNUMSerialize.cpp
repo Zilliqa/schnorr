@@ -29,10 +29,12 @@ shared_ptr<BIGNUM> BIGNUMSerialize::GetNumber(const bytes& src,
                                               unsigned int size) {
   // Check for offset overflow
   if ((offset + size) < size) {
+    // Overflow detected
     return nullptr;
   }
 
   if (offset + size > src.size()) {
+    // Can't get BIGNUM
     return nullptr;
   }
 
@@ -45,6 +47,7 @@ void BIGNUMSerialize::SetNumber(bytes& dst, unsigned int offset,
                                 const shared_ptr<BIGNUM>& value) {
   // Check for offset overflow
   if ((offset + size) < size) {
+    // Overflow detected
     return;
   }
 
@@ -62,7 +65,7 @@ void BIGNUMSerialize::SetNumber(bytes& dst, unsigned int offset,
 
     if (BN_bn2bin(value.get(), dst.data() + offset + size_diff) !=
         actual_bn_size) {
-      //
+      // BN_bn2bin failed
     }
   } else {
     // BIGNUM size > declared size

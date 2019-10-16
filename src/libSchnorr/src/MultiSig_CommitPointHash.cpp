@@ -25,6 +25,7 @@ bool CommitPointHash::constructPreChecks() { return (m_h != nullptr); }
 CommitPointHash::CommitPointHash()
     : m_h(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 }
@@ -32,6 +33,7 @@ CommitPointHash::CommitPointHash()
 CommitPointHash::CommitPointHash(const CommitPoint& point)
     : m_h(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -40,13 +42,14 @@ CommitPointHash::CommitPointHash(const CommitPoint& point)
 
 CommitPointHash::CommitPointHash(const bytes& src, unsigned int offset) {
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init CommitPointHash
   }
 }
 
 CommitPointHash::CommitPointHash(const CommitPointHash& src)
     : m_h(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 

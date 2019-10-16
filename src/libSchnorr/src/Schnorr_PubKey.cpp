@@ -33,6 +33,7 @@ bool PubKey::constructPreChecks() { return (m_P != nullptr); }
 PubKey::PubKey()
     : m_P(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 }
@@ -40,6 +41,7 @@ PubKey::PubKey()
 PubKey::PubKey(const PrivKey& privkey)
     : m_P(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
@@ -58,22 +60,24 @@ PubKey::PubKey(const PrivKey& privkey)
 PubKey::PubKey(const bytes& src, unsigned int offset)
     : m_P(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init PubKey from stream
   }
 }
 
 PubKey::PubKey(const PubKey& src)
     : m_P(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free) {
   if (!constructPreChecks()) {
+    // constructPreChecks failed
     throw std::bad_alloc();
   }
 
   if (!EC_POINT_copy(m_P.get(), src.m_P.get())) {
-    //
+    // PubKey copy failed
   }
 }
 
@@ -112,10 +116,12 @@ bool PubKey::Deserialize(const bytes& src, unsigned int offset) {
       ECPOINTSerialize::GetNumber(src, offset, PUB_KEY_SIZE);
 
   if (result == nullptr) {
+    // ECPOINTSerialize::GetNumber failed
     return false;
   }
 
   if (!EC_POINT_copy(m_P.get(), result.get())) {
+    // PubKey copy failed
     return false;
   }
 
@@ -128,7 +134,7 @@ bool PubKey::Deserialize(const bytes& src, unsigned int offset) {
 
 PubKey& PubKey::operator=(const PubKey& src) {
   if (!EC_POINT_copy(m_P.get(), src.m_P.get())) {
-    //
+    // PubKey copy failed
   }
   return *this;
 }
@@ -137,6 +143,7 @@ bool PubKey::comparePreChecks(const PubKey& r, shared_ptr<BIGNUM>& lhs_bnvalue,
                               shared_ptr<BIGNUM>& rhs_bnvalue) const {
   unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
   if (ctx == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -150,6 +157,7 @@ bool PubKey::comparePreChecks(const PubKey& r, shared_ptr<BIGNUM>& lhs_bnvalue,
       BN_clear_free);
 
   if ((lhs_bnvalue == nullptr) || (rhs_bnvalue == nullptr)) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 

@@ -26,6 +26,7 @@ CommitPoint::CommitPoint()
     : m_p(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free),
       m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 }
@@ -34,6 +35,7 @@ CommitPoint::CommitPoint(const CommitSecret& secret)
     : m_p(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free),
       m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -42,7 +44,7 @@ CommitPoint::CommitPoint(const CommitSecret& secret)
 
 CommitPoint::CommitPoint(const bytes& src, unsigned int offset) {
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init CommitPoint
   }
 }
 
@@ -50,6 +52,7 @@ CommitPoint::CommitPoint(const CommitPoint& src)
     : m_p(EC_POINT_new(Schnorr::GetCurveGroup()), EC_POINT_clear_free),
       m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -73,6 +76,7 @@ bool CommitPoint::Deserialize(const bytes& src, unsigned int offset) {
   shared_ptr<EC_POINT> tmp;
   tmp = ECPOINTSerialize::GetNumber(src, offset, COMMIT_POINT_SIZE);
   if (tmp == nullptr) {
+    // Deserialization failure
     return false;
   }
 
@@ -99,6 +103,7 @@ CommitPoint& CommitPoint::operator=(const CommitPoint& src) {
 bool CommitPoint::operator==(const CommitPoint& r) const {
   unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
   if (ctx == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 

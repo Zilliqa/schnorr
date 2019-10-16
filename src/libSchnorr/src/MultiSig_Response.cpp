@@ -24,6 +24,7 @@ bool Response::constructPreChecks() { return (m_r != nullptr); }
 
 Response::Response() : m_r(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 }
@@ -32,6 +33,7 @@ Response::Response(const CommitSecret& secret, const Challenge& challenge,
                    const PrivKey& privkey)
     : m_r(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -40,13 +42,14 @@ Response::Response(const CommitSecret& secret, const Challenge& challenge,
 
 Response::Response(const bytes& src, unsigned int offset) {
   if (!Deserialize(src, offset)) {
-    //
+    // We failed to init Response
   }
 }
 
 Response::Response(const Response& src)
     : m_r(BN_new(), BN_clear_free), m_initialized(false) {
   if (!constructPreChecks()) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -71,6 +74,7 @@ bool Response::Deserialize(const bytes& src, unsigned int offset) {
       BIGNUMSerialize::GetNumber(src, offset, RESPONSE_SIZE);
 
   if (tmp == nullptr) {
+    // Deserialization failure
     return false;
   }
 
@@ -104,6 +108,7 @@ void Response::Set(const CommitSecret& secret, const Challenge& challenge,
   // Compute s = k - krpiv*c
   unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
   if (ctx == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 

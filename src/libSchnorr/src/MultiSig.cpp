@@ -32,6 +32,7 @@ shared_ptr<PubKey> MultiSig::AggregatePubKeys(const vector<PubKey>& pubkeys) {
 
   shared_ptr<PubKey> aggregatedPubkey(new PubKey(pubkeys.at(0)));
   if (aggregatedPubkey == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -56,6 +57,7 @@ shared_ptr<CommitPoint> MultiSig::AggregateCommits(
 
   shared_ptr<CommitPoint> aggregatedCommit(new CommitPoint(commitPoints.at(0)));
   if (aggregatedCommit == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -80,11 +82,13 @@ shared_ptr<Response> MultiSig::AggregateResponses(
 
   shared_ptr<Response> aggregatedResponse(new Response(responses.at(0)));
   if (aggregatedResponse == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
   unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
   if (ctx == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -114,6 +118,7 @@ shared_ptr<Signature> MultiSig::AggregateSign(
 
   shared_ptr<Signature> result(new Signature());
   if (result == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -188,6 +193,7 @@ bool MultiSig::VerifyResponse(const Response& response,
         return false;
       }
     } else {
+      // Memory allocation failure
       throw std::bad_alloc();
     }
   } catch (const std::exception& e) {
@@ -365,6 +371,7 @@ bool MultiSig::MultiSigVerify(const bytes& message, unsigned int offset,
 
       sha2.Reset();
     } else {
+      // Memory allocation failure
       throw std::bad_alloc();
     }
     return (!err) && (BN_cmp(challenge_built.get(), toverify.m_r.get()) == 0);

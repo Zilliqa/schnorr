@@ -30,11 +30,13 @@ shared_ptr<EC_POINT> ECPOINTSerialize::GetNumber(const bytes& src,
   shared_ptr<BIGNUM> bnvalue = BIGNUMSerialize::GetNumber(src, offset, size);
 
   if (bnvalue == nullptr) {
+    // BIGNUMSerialize::GetNumber failed
     return nullptr;
   }
 
   unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
   if (ctx == nullptr) {
+    // Memory allocation failure
     throw std::bad_alloc();
   }
 
@@ -51,6 +53,7 @@ void ECPOINTSerialize::SetNumber(bytes& dst, unsigned int offset,
   {
     unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
     if (ctx == nullptr) {
+      // Memory allocation failure
       throw std::bad_alloc();
     }
 
@@ -61,6 +64,7 @@ void ECPOINTSerialize::SetNumber(bytes& dst, unsigned int offset,
   }
 
   if (bnvalue == nullptr) {
+    // EC_POINT_point2bn failed
     return;
   }
 
