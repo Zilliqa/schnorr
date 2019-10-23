@@ -6,7 +6,7 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
 
-project(Zilliqa)
+project(Schnorr)
 
 # detect operating system
 message(STATUS "We are on a ${CMAKE_SYSTEM_NAME} system")
