@@ -201,7 +201,7 @@ bool Schnorr::Sign(const bytes& message, unsigned int offset, unsigned int size,
       }
 
       err = (BN_nnmod(result.m_r.get(), result.m_r.get(), GetCurveOrder(),
-                      NULL) == 0);
+                      ctx.get()) == 0);
       if (err) {
         // BIGNUM NNmod failed
         return false;
@@ -373,7 +373,7 @@ bool Schnorr::Verify(const bytes& message, unsigned int offset,
       }
 
       err2 = (BN_nnmod(challenge_built.get(), challenge_built.get(),
-                       GetCurveOrder(), NULL) == 0);
+                       GetCurveOrder(), ctx.get()) == 0);
       err = err || err2;
       if (err2) {
         // Challenge rebuild mod failed
