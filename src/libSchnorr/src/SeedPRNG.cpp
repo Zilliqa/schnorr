@@ -16,11 +16,13 @@
  */
 
 #include <openssl/rand.h>
+#include <iostream>
 #include "SchnorrInternal.h"
 
 bool SeedPRNG() {
   unsigned int attempt = 0;
   while ((RAND_status() == 0) && (attempt++ < 10)) {
+    std::cout << "Manually seeding" << std::endl;
     unsigned char buf[256];
     unsigned int seed = (unsigned)time(NULL) ^ (unsigned)getpid();
     unsigned int v = seed;
