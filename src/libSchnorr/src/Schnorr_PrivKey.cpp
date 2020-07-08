@@ -36,6 +36,11 @@ PrivKey::PrivKey() : m_d(BN_new(), BN_clear_free) {
     throw std::bad_alloc();
   }
 
+  if (!SeedPRNG()) {
+    // PRNG seeding failed
+    return;
+  }
+
   // kpriv->d should be in [1,...,order-1]
   do {
     if (!BN_rand_range(m_d.get(), Schnorr::GetCurveOrder())) {

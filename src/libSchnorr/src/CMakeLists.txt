@@ -10,7 +10,8 @@ add_library (Schnorr SHARED
 	MultiSig_Challenge.cpp
 	MultiSig_Response.cpp
 	BIGNUMSerialize.cpp
-	ECPOINTSerialize.cpp)
+	ECPOINTSerialize.cpp
+	SeedPRNG.cpp)
 
 if("${OPENSSL_VERSION_MAJOR}.${OPENSSL_VERSION_MINOR}" VERSION_LESS "1.1")
 	target_sources (Schnorr PRIVATE generate_dsa_nonce.c)

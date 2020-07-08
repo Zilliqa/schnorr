@@ -86,4 +86,6 @@ static bool SerializableCryptoToHexStr(const T& input, std::string& str) {
 const uint8_t SECOND_DOMAIN_SEPARATED_HASH_FUNCTION_BYTE = 0x01;
 const uint8_t THIRD_DOMAIN_SEPARATED_HASH_FUNCTION_BYTE = 0x11;
 
+bool SeedPRNG();
+
 #endif  // ZILLIQA_SRC_LIBSCHNORR_SRC_SCHNORRINTERNAL_H_
