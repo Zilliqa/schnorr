@@ -366,9 +366,8 @@ bool MultiSig::MultiSigVerify(const bytes& message, unsigned int offset,
         // Challenge bin2bn conversion failed
         return false;
       }
-
       err2 = (BN_nnmod(challenge_built.get(), challenge_built.get(),
-                       Schnorr::GetCurveOrder(), NULL) == 0);
+                       Schnorr::GetCurveOrder(), ctx.get()) == 0);
       err = err || err2;
       if (err2) {
         // Challenge rebuild mod failed
