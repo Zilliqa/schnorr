@@ -52,6 +52,17 @@
 extern "C" {
 #endif
 
+void *memset_secured(void *dest, size_t dest_sz, int c, size_t count) {
+  if (count > dest_sz) {
+    count = dest_sz;
+  }
+  volatile unsigned char *p = dest;
+  while (count--) {
+    *p++ = (unsigned char)c;
+  }
+  return dest;
+}
+
 int BN_generate_dsa_nonce(BIGNUM *out, const BIGNUM *range,
                           const BIGNUM *priv, const unsigned char *message,
                           size_t message_len, BN_CTX *ctx)
@@ -87,7 +98,7 @@ int BN_generate_dsa_nonce(BIGNUM *out, const BIGNUM *range,
         goto err;
     }
     memcpy(private_bytes, priv->d, todo);
-    memset(private_bytes + todo, 0, sizeof(private_bytes) - todo);
+    memset_secured(private_bytes + todo, sizeof(private_bytes), 0, sizeof(private_bytes) - todo);
 
     for (done = 0; done < num_k_bytes;) {
         //FIXME: RAND_priv_bytes replaced with RAND_bytes(), see the difference:

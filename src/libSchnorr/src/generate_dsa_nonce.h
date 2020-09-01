@@ -33,6 +33,8 @@ extern "C" {
 int BN_generate_dsa_nonce(BIGNUM *out, const BIGNUM *range, const BIGNUM *priv,
                           const unsigned char *message, size_t message_len,
                           BN_CTX *ctx);
+void *memset_secured(void *dest, size_t dest_sz, int c, size_t count);
+
 #ifdef __cplusplus
 }
 #endif
