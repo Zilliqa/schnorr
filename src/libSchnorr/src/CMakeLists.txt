@@ -1,4 +1,4 @@
-add_library (Schnorr SHARED
+set(source_files
 	Schnorr.cpp
 	Schnorr_PrivKey.cpp
 	Schnorr_PubKey.cpp
@@ -12,6 +12,12 @@ add_library (Schnorr SHARED
 	BIGNUMSerialize.cpp
 	ECPOINTSerialize.cpp
 	SeedPRNG.cpp)
+
+if(NOT ${SCHNORR_BUILD_ARCHIVE})
+  add_library (Schnorr SHARED ${source_files})
+else()
+  add_library (Schnorr STATIC ${source_files})
+endif()
 
 if("${OPENSSL_VERSION_MAJOR}.${OPENSSL_VERSION_MINOR}" VERSION_LESS "1.1")
 	target_sources (Schnorr PRIVATE generate_dsa_nonce.c)
