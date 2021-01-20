@@ -21,6 +21,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
 find_package(Boost COMPONENTS system unit_test_framework REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
 
 #TODO: upgrade to OpenSSL 1.1.1a
 find_package(OpenSSL REQUIRED)
