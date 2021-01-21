@@ -13,9 +13,11 @@ set(source_files
 	ECPOINTSerialize.cpp
 	SeedPRNG.cpp)
 
-if(NOT ${SCHNORR_BUILD_ARCHIVE})
+if(NOT SCHNORR_BUILD_ARCHIVE)
+  message(STATUS "Building shared library ...")
   add_library (Schnorr SHARED ${source_files})
 else()
+  message(STATUS "Building archive ...")
   add_library (Schnorr STATIC ${source_files})
 endif()
 
