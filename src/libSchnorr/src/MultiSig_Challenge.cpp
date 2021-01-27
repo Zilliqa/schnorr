@@ -129,11 +129,6 @@ void Challenge::Set(const CommitPoint& aggregatedCommit,
 
   bytes buf(Schnorr::PUBKEY_COMPRESSED_SIZE_BYTES);
 
-  unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
-  if (!ctx) {
-    throw std::bad_alloc();
-  }
-
   // Convert the committment to octets first
   if (EC_POINT_point2oct(Schnorr::GetCurveGroup(), aggregatedCommit.m_p.get(),
                          POINT_CONVERSION_COMPRESSED, buf.data(),
@@ -171,8 +166,7 @@ void Challenge::Set(const CommitPoint& aggregatedCommit,
     return;
   }
 
-  if (BN_nnmod(m_c.get(), m_c.get(), Schnorr::GetCurveOrder(), ctx.get()) ==
-      0) {
+  if (BN_nnmod(m_c.get(), m_c.get(), Schnorr::GetCurveOrder(), NULL) == 0) {
     // Could not reduce challenge modulo group order
     return;
   }
