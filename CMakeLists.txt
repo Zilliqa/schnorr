@@ -77,9 +77,9 @@ if (ENABLE_COVERAGE AND CMAKE_COMPILER_IS_GNUCXX)
     include(CodeCoverage)
     add_compile_options(--coverage)
     link_libraries(--coverage)
-    add_custom_target(ctest COMMAND ${CMAKE_CTEST_COMMAND})
+    add_custom_target(ctest_schnorr COMMAND ${CMAKE_CTEST_COMMAND})
     # TODO: remove the hardcoded number in -j option
-    setup_target_for_coverage(${PROJECT_NAME}_coverage ctest coverage "-j2;--output-on-failure")
+    setup_target_for_coverage(${PROJECT_NAME}_coverage ctest_schnorr coverage "-j2;--output-on-failure")
 endif()
 
 add_subdirectory (src)
