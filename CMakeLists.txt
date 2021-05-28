@@ -102,7 +102,7 @@ install(
 )
 
 install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/src/libSchnorr/include
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/libSchnorr/include
     DESTINATION ${CMAKE_INSTALL_PREFIX}
     USE_SOURCE_PERMISSIONS
 )
