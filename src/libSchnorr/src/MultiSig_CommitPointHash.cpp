@@ -17,6 +17,7 @@
 
 #include "MultiSig.h"
 #include "SchnorrInternal.h"
+#include <iostream>
 
 using namespace std;
 
@@ -32,6 +33,9 @@ CommitPointHash::CommitPointHash()
 
 CommitPointHash::CommitPointHash(const CommitPoint& point)
     : m_h(BN_new(), BN_clear_free), m_initialized(false) {
+
+
+  std::cerr << "debug print" << std::endl;
   if (!constructPreChecks()) {
     // Memory allocation failure
     throw std::bad_alloc();
@@ -126,6 +130,8 @@ void CommitPointHash::Set(const CommitPoint& point) {
     // Digest to scalar failed
     return;
   }
+
+  std::cerr << "KILME" << std::endl;
 
   if (BN_nnmod(m_h.get(), m_h.get(), Schnorr::GetCurveOrder(), ctx.get()) ==
       0) {
