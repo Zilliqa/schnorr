@@ -17,6 +17,7 @@
 
 #include "MultiSig.h"
 #include "SchnorrInternal.h"
+#include <iostream>
 
 using namespace std;
 
@@ -32,6 +33,9 @@ CommitPointHash::CommitPointHash()
 
 CommitPointHash::CommitPointHash(const CommitPoint& point)
     : m_h(BN_new(), BN_clear_free), m_initialized(false) {
+
+
+  std::cerr << "debug print" << std::endl;
   if (!constructPreChecks()) {
     // Memory allocation failure
     throw std::bad_alloc();
@@ -104,6 +108,10 @@ void CommitPointHash::Set(const CommitPoint& point) {
   // byte to 0x01.
   sha2.Update({SECOND_DOMAIN_SEPARATED_HASH_FUNCTION_BYTE});
 
+  unique_ptr<BN_CTX, void (*)(BN_CTX*)> ctx(BN_CTX_new(), BN_CTX_free);
+  if (!ctx) {
+    throw std::bad_alloc();
+  }
   // Convert the commitment to octets first
   if (EC_POINT_point2oct(Schnorr::GetCurveGroup(), point.m_p.get(),
                          POINT_CONVERSION_COMPRESSED, buf.data(),
@@ -123,7 +131,10 @@ void CommitPointHash::Set(const CommitPoint& point) {
     return;
   }
 
-  if (BN_nnmod(m_h.get(), m_h.get(), Schnorr::GetCurveOrder(), NULL) == 0) {
+  std::cerr << "KILME" << std::endl;
+
+  if (BN_nnmod(m_h.get(), m_h.get(), Schnorr::GetCurveOrder(), ctx.get()) ==
+      0) {
     // Could not reduce hashpoint value modulo group order
     return;
   }
