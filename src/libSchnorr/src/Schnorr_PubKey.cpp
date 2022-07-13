@@ -112,6 +112,9 @@ bool PubKey::Serialize(bytes& dst, unsigned int offset) const {
 }
 
 bool PubKey::Deserialize(const bytes& src, unsigned int offset) {
+
+  std::cout << "debugme: nh" << std::endl;
+
   shared_ptr<EC_POINT> result =
       ECPOINTSerialize::GetNumber(src, offset, src.size());
 
