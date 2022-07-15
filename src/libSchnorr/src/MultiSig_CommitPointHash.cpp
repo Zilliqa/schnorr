@@ -17,7 +17,6 @@
 
 #include "MultiSig.h"
 #include "SchnorrInternal.h"
-#include <iostream>
 
 using namespace std;
 
