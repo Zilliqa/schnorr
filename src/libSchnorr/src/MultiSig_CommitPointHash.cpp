@@ -32,8 +32,6 @@ CommitPointHash::CommitPointHash()
 
 CommitPointHash::CommitPointHash(const CommitPoint& point)
     : m_h(BN_new(), BN_clear_free), m_initialized(false) {
-
-
   if (!constructPreChecks()) {
     // Memory allocation failure
     throw std::bad_alloc();
