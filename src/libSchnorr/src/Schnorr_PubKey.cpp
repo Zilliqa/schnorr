@@ -113,7 +113,7 @@ bool PubKey::Serialize(bytes& dst, unsigned int offset) const {
 
 bool PubKey::Deserialize(const bytes& src, unsigned int offset) {
   shared_ptr<EC_POINT> result =
-      ECPOINTSerialize::GetNumber(src, offset, src.size());
+      ECPOINTSerialize::GetNumber(src, offset, PUB_KEY_SIZE);
 
   if (result == nullptr) {
     // ECPOINTSerialize::GetNumber failed
