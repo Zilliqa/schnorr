@@ -19,6 +19,11 @@
 #include <openssl/ec.h>
 #include <openssl/err.h>
 
+#include <iostream>
+#include <csignal>
+#include <iostream>
+#include <cstdlib>
+
 #include "Schnorr.h"
 #include "SchnorrInternal.h"
 
@@ -112,6 +117,12 @@ bool PubKey::Serialize(bytes& dst, unsigned int offset) const {
 }
 
 bool PubKey::Deserialize(const bytes& src, unsigned int offset) {
+
+  if (src.size() != PUB_KEY_SIZE && src.size() != (PUB_KEY_SIZE * 2)) {
+    std::cout << "Deserialized pubkey size is incorrect with size: " <<  src.size() << std::endl;
+    std::abort();
+  }
+
   shared_ptr<EC_POINT> result =
       ECPOINTSerialize::GetNumber(src, offset, src.size());
 
