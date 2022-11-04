@@ -95,3 +95,8 @@ compile_commands.json
 .idea
 .vscode
 .history
+
+# vcpkg
+vcpkg-registry/
+vcpkg-configuration.json
+vcpkg.json
